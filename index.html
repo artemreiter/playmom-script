@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PlayMom · Сценарий · Split-screen + голосовые</title>
+<title>PlayMom · Сценарий · Locked-bottom + Apple Pay reveal</title>
 <style>
   :root {
     --paper: #f6f2e9;
@@ -15,6 +15,8 @@
     --whatsapp: #25d366;
     --whatsapp-bg: #e7fde0;
     --rule: #d9cfb8;
+    --apple-pay: #000000;
+    --face-id-green: #34c759;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -74,14 +76,10 @@
   p { margin: 12px 0; }
   p + p { margin-top: 14px; }
 
-  em {
-    font-style: italic;
-    color: var(--ink);
-  }
-
+  em { font-style: italic; color: var(--ink); }
   strong { font-weight: 600; }
 
-  /* Header block */
+  /* Header */
   .header-meta {
     display: flex;
     flex-wrap: wrap;
@@ -92,11 +90,7 @@
     border-bottom: 1px solid var(--rule);
     font-size: 13px;
   }
-  .meta-item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
+  .meta-item { display: flex; flex-direction: column; gap: 2px; }
   .meta-label {
     font-size: 11px;
     text-transform: uppercase;
@@ -105,7 +99,20 @@
   }
   .meta-value { font-weight: 600; }
 
-  /* Lead paragraph */
+  .v-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-weight: 700;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
   .lead {
     font-family: "Iowan Old Style", Georgia, serif;
     font-size: 20px;
@@ -114,22 +121,20 @@
     margin: 32px 0;
   }
 
-  /* Concept block */
   .concept-card {
     background: var(--paper-dark);
     border: 1px solid var(--rule);
-    padding: 24px 28px;
-    margin: 24px 0;
-    border-radius: 2px;
+    border-radius: 4px;
+    padding: 18px 22px;
+    margin: 24px 0 32px;
   }
 
-  /* Scene card */
+  /* Scene */
   .scene {
-    margin: 48px 0;
-    padding-top: 24px;
+    margin: 56px 0;
+    padding: 32px 0;
     border-top: 1px solid var(--rule);
   }
-
   .scene-head {
     display: flex;
     flex-wrap: wrap;
@@ -137,7 +142,6 @@
     gap: 16px;
     margin-bottom: 20px;
   }
-
   .timecode {
     font-family: "SF Mono", "Menlo", monospace;
     font-size: 14px;
@@ -148,7 +152,6 @@
     border-radius: 2px;
     letter-spacing: 0.02em;
   }
-
   .clock {
     font-family: "SF Mono", "Menlo", monospace;
     font-size: 13px;
@@ -157,14 +160,12 @@
     padding: 3px 10px;
     border-radius: 2px;
   }
-
   .scene-title {
     font-family: "Iowan Old Style", Georgia, serif;
     font-size: 26px;
     font-weight: 600;
     letter-spacing: -0.01em;
   }
-
   .scene-tag {
     font-size: 11px;
     text-transform: uppercase;
@@ -172,8 +173,9 @@
     color: var(--accent);
     font-weight: 700;
   }
+  .scene-tag.pivot { color: #2a6f3f; }
 
-  /* Frame — split screen illustration */
+  /* Phone frame */
   .frame {
     position: relative;
     width: 260px;
@@ -190,16 +192,193 @@
     overflow: hidden;
     position: relative;
   }
-
   .frame-half {
     background: #f3ecdd;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    min-height: 144px;
   }
   .frame-half svg { width: 100%; height: auto; display: block; }
   .frame-half.top { border-bottom: 2px solid #111; }
+
+  /* Locked bottom — dark overlay + lock icon */
+  .frame-half.locked {
+    background: #0d0a08;
+    overflow: hidden;
+  }
+  .frame-half.locked .locked-bg {
+    position: absolute;
+    inset: 0;
+    background: #f3ecdd;
+    opacity: 0.18;
+    filter: blur(2px) grayscale(0.4);
+  }
+  .frame-half.locked .locked-bg svg { opacity: 0.7; }
+  .frame-half.locked .lock-pill {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 18px;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    color: #f3ecdd;
+  }
+  .frame-half.locked .lock-icon {
+    width: 26px;
+    height: 26px;
+  }
+  .frame-half.locked .lock-text {
+    font-size: 8.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgba(243,236,221,0.9);
+  }
+  .frame-half.locked .lock-sub {
+    font-size: 7.5px;
+    letter-spacing: 0.05em;
+    color: rgba(243,236,221,0.55);
+    margin-top: 2px;
+  }
+  .frame-half.locked.warming .lock-pill {
+    border-color: rgba(178,64,30,0.65);
+    box-shadow: 0 0 18px rgba(178,64,30,0.35);
+  }
+
+  /* Apple Pay confirmation */
+  .frame-half.applepay {
+    background: #000;
+    color: #fff;
+  }
+  .frame-half.applepay .ap-sheet {
+    width: 88%;
+    background: rgba(28,28,30,0.92);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: #fff;
+    border: 0.5px solid rgba(255,255,255,0.08);
+  }
+  .frame-half.applepay .ap-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9px;
+    margin: 4px 0;
+    color: rgba(255,255,255,0.7);
+  }
+  .frame-half.applepay .ap-row strong {
+    color: #fff;
+    font-weight: 600;
+  }
+  .frame-half.applepay .ap-logo {
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .frame-half.applepay .ap-logo .logo-icon {
+    width: 14px;
+    height: 14px;
+  }
+  .frame-half.applepay .ap-divider {
+    height: 0.5px;
+    background: rgba(255,255,255,0.08);
+    margin: 8px 0;
+  }
+  .frame-half.applepay .face-id {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 9px;
+  }
+  .frame-half.applepay .face-id .check {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--face-id-green);
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .frame-half.applepay .face-id .label {
+    color: var(--face-id-green);
+    font-weight: 600;
+  }
+
+  /* Unlocked badge */
+  .frame-half .unlocked-flash {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--face-id-green);
+    color: white;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    padding: 3px 8px;
+    border-radius: 999px;
+    z-index: 3;
+  }
+
+  /* End card frame */
+  .frame-half.endcard {
+    background: var(--paper);
+    color: var(--ink);
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 12px;
+    text-align: center;
+    min-height: 288px;
+  }
+  .frame-half.endcard .pm-logo {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .frame-half.endcard .pm-logo em { color: var(--ink); font-style: italic; }
+  .frame-half.endcard .pm-tag {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-muted);
+    margin-top: 6px;
+  }
+  .frame-half.endcard .pm-family {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-style: italic;
+    font-size: 10.5px;
+    color: var(--ink);
+    margin-top: 10px;
+  }
+  .frame-half.endcard .pm-store {
+    margin-top: 10px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 4px;
+  }
 
   .half-label {
     position: absolute;
@@ -213,6 +392,11 @@
     background: rgba(255,255,255,0.85);
     padding: 3px 6px;
     border-radius: 2px;
+    z-index: 4;
+  }
+  .half-label.dark {
+    background: rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.85);
   }
   .tc-badge {
     position: absolute;
@@ -225,6 +409,11 @@
     padding: 3px 6px;
     border-radius: 2px;
     font-weight: 600;
+    z-index: 4;
+  }
+  .tc-badge.dark {
+    background: rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.9);
   }
 
   /* WhatsApp overlay */
@@ -241,6 +430,7 @@
     font-size: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     max-width: 150px;
+    z-index: 5;
   }
   .wa-avatar {
     width: 20px;
@@ -276,7 +466,7 @@
   .wa-wave span:nth-child(7) { height: 7px; }
   .wa-wave span:nth-child(8) { height: 10px; }
 
-  /* Scene body — two column: frame + content */
+  /* Scene body */
   .scene-body {
     display: grid;
     grid-template-columns: 260px 1fr;
@@ -290,10 +480,9 @@
     }
     .frame { margin: 0 auto; }
   }
-
   .scene-content h4:first-child { margin-top: 0; }
 
-  /* Description table of what's in each half */
+  /* Halves description */
   .halves {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -308,6 +497,16 @@
     font-size: 13px;
   }
   .halves > div.calm { border-left-color: var(--accent); }
+  .halves > div.locked-desc {
+    background: #1a1714;
+    color: rgba(243,236,221,0.85);
+    border-left-color: rgba(255,255,255,0.3);
+  }
+  .halves > div.locked-desc .half-title { color: rgba(243,236,221,0.55); }
+  .halves > div.unlocked-desc {
+    border-left-color: var(--face-id-green);
+    background: #ebf7eb;
+  }
   .halves .half-title {
     font-size: 10px;
     text-transform: uppercase;
@@ -317,7 +516,7 @@
     margin-bottom: 4px;
   }
 
-  /* Voice message bubble */
+  /* Voice message */
   .vm {
     background: var(--whatsapp-bg);
     border-radius: 12px;
@@ -325,6 +524,10 @@
     margin: 12px 0;
     position: relative;
     border-left: 3px solid var(--whatsapp);
+  }
+  .vm.pivot {
+    background: #fff5e8;
+    border-left-color: var(--accent);
   }
   .vm-head {
     display: flex;
@@ -335,6 +538,7 @@
     color: var(--ink-muted);
   }
   .vm-head .dot { color: var(--whatsapp); font-size: 14px; }
+  .vm.pivot .vm-head .dot { color: var(--accent); }
   .vm-text {
     font-family: "Iowan Old Style", Georgia, serif;
     font-size: 15px;
@@ -370,6 +574,7 @@
     justify-content: center;
     font-size: 10px;
   }
+  .vm.pivot .vm-audio .play { background: var(--accent); }
   .vm-wave-big {
     flex: 1;
     display: flex;
@@ -384,8 +589,9 @@
     opacity: 0.4;
     border-radius: 2px;
   }
+  .vm.pivot .vm-wave-big span { background: var(--accent); }
 
-  /* Production notes */
+  /* Notes */
   .note {
     font-size: 13px;
     color: var(--ink-muted);
@@ -396,6 +602,12 @@
     border-radius: 4px;
   }
   .note strong { color: var(--ink); }
+  .note.unlock {
+    background: #fff5e8;
+    border-color: var(--accent);
+    border-style: solid;
+    color: var(--ink);
+  }
 
   /* Emotional arc */
   .arc {
@@ -407,179 +619,134 @@
   }
   .arc-graph {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    margin-top: 16px;
     align-items: end;
-    height: 120px;
-    margin: 16px 0;
+    height: 140px;
   }
   .arc-bar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    height: 100%;
-    justify-content: flex-end;
-  }
-  .arc-bar .fill {
-    width: 100%;
     background: var(--ink);
-    border-radius: 2px;
-  }
-  .arc-bar.low .fill { background: var(--accent); height: 30%; }
-  .arc-bar.mid .fill { background: #8a7d6b; height: 55%; }
-  .arc-bar.high .fill { background: var(--ink); height: 90%; }
-  .arc-bar.peak .fill { background: var(--accent); height: 100%; }
-  .arc-bar .label {
-    font-size: 11px;
-    color: var(--ink-muted);
-    text-align: center;
-    font-family: "SF Mono", monospace;
-  }
-  .arc-bar .moment {
-    font-size: 11px;
-    color: var(--ink);
-    text-align: center;
+    color: var(--paper);
+    border-radius: 4px 4px 0 0;
+    padding: 8px 6px;
+    font-size: 10px;
     font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .arc-bar.peak { background: var(--accent); }
+  .arc-bar.calm { background: #2a6f3f; }
+  .arc-labels {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 11px;
+    text-align: center;
+    color: var(--ink-muted);
   }
 
   /* Quotables */
-  .quotables {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 16px;
-    margin-top: 16px;
-  }
   .quote {
-    padding: 20px 22px;
-    background: var(--paper-dark);
-    border-radius: 4px;
-    border-top: 3px solid var(--accent);
-    position: relative;
-  }
-  .quote-text {
     font-family: "Iowan Old Style", Georgia, serif;
-    font-size: 18px;
+    font-size: 22px;
     font-style: italic;
-    line-height: 1.4;
-    margin-bottom: 10px;
+    color: var(--ink);
+    margin: 16px 0;
+    padding: 12px 0 12px 20px;
+    border-left: 3px solid var(--accent);
   }
-  .quote-why {
+  .quote-attr {
+    font-style: normal;
+    font-family: -apple-system, sans-serif;
     font-size: 12px;
     color: var(--ink-muted);
+    margin-top: 6px;
+    display: block;
   }
 
   /* Production list */
-  .prod-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 16px;
-    margin: 16px 0;
-  }
-  .prod-col h4 { margin-top: 0; }
-  .prod-col ul {
+  ul.prod {
     list-style: none;
     padding: 0;
+    margin: 12px 0;
   }
-  .prod-col li {
-    padding: 8px 0 8px 20px;
-    position: relative;
+  ul.prod li {
+    padding: 10px 0 10px 28px;
+    border-bottom: 1px dotted var(--rule);
     font-size: 14px;
-    border-bottom: 1px solid var(--rule);
+    position: relative;
   }
-  .prod-col li:last-child { border-bottom: none; }
-  .prod-col li::before {
-    content: "";
+  ul.prod li::before {
+    content: "□";
     position: absolute;
     left: 0;
-    top: 14px;
-    width: 10px;
-    height: 10px;
-    border: 1.5px solid var(--ink);
-    border-radius: 2px;
-  }
-
-  /* Final end card */
-  .end {
-    margin-top: 80px;
-    padding: 48px 32px;
-    text-align: center;
-    border-top: 3px double var(--ink);
-    border-bottom: 3px double var(--ink);
-  }
-  .end h2 {
-    border: none;
-    margin-bottom: 8px;
-    padding: 0;
-    font-size: 40px;
-  }
-  .end p {
-    font-size: 15px;
+    top: 10px;
+    font-size: 16px;
     color: var(--ink-muted);
+  }
+  ul.prod li strong { display: block; font-size: 13px; color: var(--ink); margin-bottom: 2px; }
+
+  /* Final card section */
+  section.end {
+    margin: 80px 0 0;
+    padding: 48px 32px;
+    background: var(--paper-dark);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    text-align: center;
   }
 
   /* Print */
   @media print {
-    body { padding: 20px; max-width: none; }
-    .scene { page-break-inside: avoid; break-inside: avoid; }
-    h2 { page-break-after: avoid; }
-    .frame { box-shadow: none; }
+    body { padding: 16px; max-width: 100%; }
+    .scene { page-break-inside: avoid; }
   }
-
-  /* Small phone representation of split layout */
-  .phone-preview {
-    width: 180px;
-    aspect-ratio: 9/19.5;
-    background: #111;
-    border-radius: 20px;
-    padding: 10px 6px;
-    margin: 0 auto;
-  }
-  .phone-inner {
-    height: 100%;
-    background: #1a1714;
-    border-radius: 12px;
-    overflow: hidden;
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    position: relative;
-  }
-  .phone-half-top { background: #e6dcc6; border-bottom: 2px solid #111; }
-  .phone-half-bottom { background: #f0e8d2; }
 </style>
 </head>
 <body>
 
 <header>
-  <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--ink-muted); margin-bottom: 12px;">Сценарий рекламного ролика · Final</div>
-  <h1>PlayMom · <em style="font-style: italic; color: var(--accent);">«Split-screen»</em></h1>
-  <div style="font-family: 'Iowan Old Style', Georgia, serif; font-size: 18px; color: var(--ink-muted); margin-top: 8px;">Голосовые Иры подруге Алёне — о Давиде, об Артёме, и о кофе, который она наконец выпила горячим.</div>
+  <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--ink-muted); margin-bottom: 12px;">Сценарий рекламного ролика · v2 — Locked-bottom + Apple Pay reveal<span class="v-badge">v2</span></div>
+  <h1>PlayMom · <em style="font-style: italic; color: var(--accent);">«Под замком»</em></h1>
+  <div style="font-family: 'Iowan Old Style', Georgia, serif; font-size: 18px; color: var(--ink-muted); margin-top: 8px;">Сверху — наша реальность. Снизу — то, что хотелось бы. Между ними — Apple Pay.</div>
 
   <div class="header-meta">
     <div class="meta-item"><span class="meta-label">Формат</span><span class="meta-value">9:16 · 35 сек</span></div>
     <div class="meta-item"><span class="meta-label">Семья</span><span class="meta-value">Артём, Ира, Давид</span></div>
     <div class="meta-item"><span class="meta-label">Адресат голосовых</span><span class="meta-value">Алёна ❤️</span></div>
-    <div class="meta-item"><span class="meta-label">Приём</span><span class="meta-value">Split-screen + WhatsApp-оверлей</span></div>
+    <div class="meta-item"><span class="meta-label">Приём</span><span class="meta-value">Locked split → Face ID → unlock</span></div>
     <div class="meta-item"><span class="meta-label">Продакшн</span><span class="meta-value">2 дня съёмок + вечер записи</span></div>
   </div>
 </header>
 
 <p class="lead">
-  Весь ролик — экран разделён пополам. Сверху — жизнь до приложения. Снизу — с PlayMom. Та же квартира, тот же Давид, те же моменты дня. Поверх всего — настоящие голосовые Иры, которые она шлёт подруге Алёне в WhatsApp. В 25-й секунде разделительная линия <em>ломается</em> — и мы видим одну общую жизнь семьи.
+  Экран поделён пополам с самого начала. Сверху — реальная жизнь с Давидом: молоко на полу, ор, голосовые подруге между делами. <strong>Снизу — затемнённая, размытая картинка под замком 🔒.</strong> Видно только обрисовку — будто там что-то хорошее, но недоступное. На 0:23 в голосовом Ира говорит: «слушай, мы сами сделали приложение, скачай». В этот момент на нижнем экране проходит <em>анимация Apple Pay</em> — Face ID моргает, чек, «Готово» — и нижняя половина оживает. Всё, что было под замком, начинается. Звук становится теплее. Финал — <em>сделано семьёй</em>.
 </p>
 
 <div class="concept-card">
   <h4>Одним предложением</h4>
-  <p style="font-family: 'Iowan Old Style', Georgia, serif; font-size: 18px; margin: 8px 0 0;">Голосовые подруге — такие настоящие, что зритель не успевает понять, что это реклама, пока в финале не допита чашка кофе.</p>
+  <p style="font-family: 'Iowan Old Style', Georgia, serif; font-size: 18px; margin: 8px 0 0;">Зритель не успевает понять, что это реклама — пока на 23-й секунде не пройдёт его собственный знакомый Face ID, и нижний экран не начнёт жить.</p>
 </div>
 
+<h2 style="font-size: 22px; margin-top: 48px;">Драматургия в одной строке</h2>
+<p style="margin: 8px 0 24px;">
+  <strong>0–22 сек:</strong> только верх (хаос). Низ заблокирован, пульсирует тёмным светом — обещание. <strong>0:22–0:28:</strong> голосовое-триггер + Apple Pay sheet snaps in → Face ID → ✓. <strong>0:28–0:33:</strong> низ оживает, музыка теплеет, Давид сосредоточенно играет. <strong>0:33–0:35:</strong> end card.
+</p>
+
 <!-- ============================================ -->
-<!-- SCENE 1 -->
+<!-- SCENE 1 — HOOK -->
 <!-- ============================================ -->
 <section class="scene">
   <div class="scene-head">
-    <span class="timecode">0:00 – 0:08</span>
-    <span class="clock">07:00 → 09:30</span>
+    <span class="timecode">0:00 – 0:07</span>
+    <span class="clock">07:00</span>
     <span class="scene-title">Хук · «Алён, секунду…»</span>
     <span class="scene-tag">Узнавание</span>
   </div>
@@ -589,30 +756,22 @@
       <div class="frame">
         <div class="frame-inner">
           <div class="frame-half top">
-            <span class="half-label">До</span>
+            <span class="half-label">Сверху · ДО</span>
             <span class="tc-badge">07:00</span>
             <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
-              <!-- kitchen table -->
               <rect x="20" y="100" width="200" height="10" fill="#8a7d6b"/>
               <rect x="30" y="108" width="6" height="40" fill="#8a7d6b"/>
               <rect x="204" y="108" width="6" height="40" fill="#8a7d6b"/>
-              <!-- milk carton tipped -->
               <rect x="80" y="82" width="16" height="22" fill="#fff" stroke="#1a1714" stroke-width="1.5" transform="rotate(-70 88 93)"/>
-              <!-- milk pouring down -->
               <path d="M72 94 Q68 120 66 148" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
-              <path d="M72 94 Q68 120 66 148" stroke="#d9cfb8" stroke-width="2" fill="none" stroke-linecap="round"/>
-              <!-- puddle on floor -->
               <ellipse cx="64" cy="150" rx="16" ry="3" fill="#fff" stroke="#1a1714" stroke-width="1"/>
-              <!-- Давид standing on table -->
               <circle cx="140" cy="78" r="9" fill="none" stroke="#1a1714" stroke-width="1.8"/>
               <line x1="140" y1="87" x2="140" y2="100" stroke="#1a1714" stroke-width="1.8"/>
               <line x1="140" y1="90" x2="128" y2="95" stroke="#1a1714" stroke-width="1.8"/>
               <line x1="140" y1="90" x2="152" y2="95" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- chaos marks -->
               <text x="155" y="75" font-size="12" fill="#b2401e">✶</text>
               <text x="110" y="72" font-size="10" fill="#b2401e">✶</text>
               <text x="162" y="90" font-size="8" fill="#b2401e">!</text>
-              <!-- Артем reaching -->
               <circle cx="195" cy="70" r="10" fill="none" stroke="#1a1714" stroke-width="1.8"/>
               <line x1="195" y1="80" x2="195" y2="110" stroke="#1a1714" stroke-width="1.8"/>
               <line x1="195" y1="85" x2="170" y2="75" stroke="#1a1714" stroke-width="1.8"/>
@@ -621,39 +780,28 @@
               <line x1="195" y1="110" x2="205" y2="140" stroke="#1a1714" stroke-width="1.8"/>
             </svg>
           </div>
-          <div class="frame-half">
-            <span class="half-label">С PlayMom</span>
-            <span class="tc-badge">07:00</span>
-            <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
-              <!-- table -->
-              <rect x="20" y="100" width="200" height="10" fill="#b2401e" opacity="0.5"/>
-              <rect x="30" y="108" width="6" height="40" fill="#b2401e" opacity="0.5"/>
-              <rect x="204" y="108" width="6" height="40" fill="#b2401e" opacity="0.5"/>
-              <!-- two bowls with grain pouring -->
-              <path d="M60 100 Q60 92 72 92 L88 92 Q100 92 100 100 Z" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <path d="M140 100 Q140 92 152 92 L168 92 Q180 92 180 100 Z" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- grain arc -->
-              <path d="M100 94 Q120 78 140 94" stroke="#1a1714" stroke-width="1.2" fill="none" stroke-dasharray="2 2"/>
-              <circle cx="115" cy="82" r="1" fill="#1a1714"/>
-              <circle cx="125" cy="80" r="1" fill="#1a1714"/>
-              <circle cx="135" cy="84" r="1" fill="#1a1714"/>
-              <!-- Давид sitting -->
-              <circle cx="120" cy="68" r="8" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- arms extended holding bowl -->
-              <line x1="120" y1="76" x2="105" y2="88" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="120" y1="76" x2="135" y2="88" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- Ира with coffee on side -->
-              <circle cx="200" cy="60" r="10" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="200" y1="70" x2="200" y2="110" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="200" y1="78" x2="188" y2="86" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="200" y1="110" x2="193" y2="140" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="200" y1="110" x2="208" y2="140" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- coffee cup -->
-              <rect x="180" y="76" width="10" height="8" fill="#fff" stroke="#1a1714" stroke-width="1"/>
-              <!-- steam -->
-              <path d="M183 73 Q185 69 184 66" stroke="#1a1714" stroke-width="0.8" fill="none"/>
-              <path d="M188 73 Q190 69 189 66" stroke="#1a1714" stroke-width="0.8" fill="none"/>
-            </svg>
+          <div class="frame-half locked">
+            <span class="half-label dark">Снизу · ЗАБЛОКИРОВАНО</span>
+            <span class="tc-badge dark">🔒</span>
+            <div class="locked-bg">
+              <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="100" width="200" height="10" fill="#b2401e" opacity="0.5"/>
+                <circle cx="120" cy="68" r="8" fill="none" stroke="#1a1714" stroke-width="1.8"/>
+                <line x1="120" y1="76" x2="105" y2="88" stroke="#1a1714" stroke-width="1.8"/>
+                <line x1="120" y1="76" x2="135" y2="88" stroke="#1a1714" stroke-width="1.8"/>
+                <circle cx="200" cy="60" r="10" fill="none" stroke="#1a1714" stroke-width="1.8"/>
+                <rect x="180" y="76" width="10" height="8" fill="#fff" stroke="#1a1714" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="lock-pill">
+              <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="11" width="16" height="10" rx="2"/>
+                <path d="M8 11V7a4 4 0 1 1 8 0v4"/>
+                <circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+              </svg>
+              <span class="lock-text">PlayMom</span>
+              <span class="lock-sub">Доступно после оплаты</span>
+            </div>
           </div>
           <div class="wa-overlay">
             <div class="wa-avatar"></div>
@@ -675,9 +823,9 @@
           <div class="half-title">Сверху · ДО</div>
           Кухня. Давид стоит <strong>на столе</strong>, молоко льётся на пол. Артём ловит его на лету.
         </div>
-        <div class="calm">
-          <div class="half-title">Снизу · С PlayMom</div>
-          Та же кухня. Давид сидит, пересыпает крупу из миски в миску. Ира пьёт горячий кофе.
+        <div class="locked-desc">
+          <div class="half-title">Снизу · 🔒 Locked</div>
+          Силуэт спокойной сцены едва читается через тёмный слой. По центру — иконка замка и подпись «PlayMom · Доступно после оплаты».
         </div>
       </div>
 
@@ -685,31 +833,31 @@
       <div class="vm">
         <div class="vm-head">
           <span class="dot">●</span>
-          <span>Алёна ❤️ · 0:14</span>
+          <span>Алёна ❤️ · 0:11</span>
         </div>
         <div class="vm-text">
-          «Алён, привет… блин, секунду.» <span class="fx">грохот</span> «ААА ДАВИД КУДА ТЫ ПОЛЕЗ!» <span class="fx">выдох</span> «Короче. Не знаю что делать. Он уже второй день — ни секунды не сидит, я не шучу. Мне кажется, я щас сойду с ума…»
+          «Алён, привет… блин, секунду.» <span class="fx">грохот</span> «ААА ДАВИД КУДА ТЫ ПОЛЕЗ!» <span class="fx">выдох</span> «Короче. Не знаю что делать. Он уже второй день — ни секунды не сидит…»
         </div>
         <div class="vm-audio">
           <span class="play">▶</span>
           <div class="vm-wave-big">
             <span style="height:30%"></span><span style="height:60%"></span><span style="height:90%"></span><span style="height:40%"></span><span style="height:70%"></span><span style="height:20%"></span><span style="height:85%"></span><span style="height:50%"></span><span style="height:30%"></span><span style="height:60%"></span><span style="height:75%"></span><span style="height:40%"></span>
           </div>
-          <span>0:14</span>
+          <span>0:11</span>
         </div>
       </div>
 
-      <div class="note"><strong>Ключ:</strong> грохот на фоне и ор Давида остаются в дубле. Не вычищать. Это и есть фактура.</div>
+      <div class="note"><strong>Ключ:</strong> низ ВСЕГДА на экране, ВСЕГДА под замком. Зритель сразу понимает: там что-то есть, но я этого ещё не получил. Это и создаёт ожидание.</div>
     </div>
   </div>
 </section>
 
 <!-- ============================================ -->
-<!-- SCENE 2 -->
+<!-- SCENE 2 — ESCALATION -->
 <!-- ============================================ -->
 <section class="scene">
   <div class="scene-head">
-    <span class="timecode">0:08 – 0:14</span>
+    <span class="timecode">0:07 – 0:13</span>
     <span class="clock">12:00</span>
     <span class="scene-title">Три минуты</span>
     <span class="scene-tag">Эскалация</span>
@@ -720,55 +868,44 @@
       <div class="frame">
         <div class="frame-inner">
           <div class="frame-half top">
-            <span class="half-label">До</span>
+            <span class="half-label">Сверху · ДО</span>
             <span class="tc-badge">12:00</span>
             <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
-              <!-- high chair -->
               <rect x="90" y="90" width="60" height="10" fill="#8a7d6b"/>
               <rect x="100" y="100" width="6" height="40" fill="#8a7d6b"/>
               <rect x="134" y="100" width="6" height="40" fill="#8a7d6b"/>
               <rect x="95" y="60" width="50" height="32" fill="none" stroke="#1a1714" stroke-width="1.5"/>
-              <!-- Давид in chair -->
               <circle cx="120" cy="50" r="8" fill="none" stroke="#1a1714" stroke-width="1.8"/>
               <line x1="120" y1="58" x2="105" y2="76" stroke="#1a1714" stroke-width="1.8"/>
               <line x1="120" y1="58" x2="138" y2="74" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- food flying -->
               <circle cx="60" cy="40" r="3" fill="#b2401e"/>
               <circle cx="40" cy="55" r="3" fill="#b2401e"/>
               <circle cx="180" cy="45" r="3" fill="#b2401e"/>
               <circle cx="200" cy="70" r="3" fill="#b2401e"/>
-              <path d="M55 45 Q40 30 20 20" stroke="#b2401e" stroke-width="1" fill="none" stroke-dasharray="2 2"/>
-              <path d="M185 50 Q200 40 220 30" stroke="#b2401e" stroke-width="1" fill="none" stroke-dasharray="2 2"/>
-              <!-- Ира with rag, slumped -->
-              <circle cx="35" cy="90" r="9" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="35" y1="99" x2="33" y2="130" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="35" y1="102" x2="20" y2="120" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="35" y1="102" x2="50" y2="115" stroke="#1a1714" stroke-width="1.8"/>
-              <rect x="46" y="112" width="10" height="8" fill="#fff" stroke="#1a1714" stroke-width="1"/>
-              <line x1="33" y1="130" x2="28" y2="148" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="33" y1="130" x2="38" y2="148" stroke="#1a1714" stroke-width="1.8"/>
+              <text x="44" y="120" font-size="10" fill="#b2401e">!</text>
+              <text x="190" y="120" font-size="10" fill="#b2401e">!</text>
             </svg>
           </div>
-          <div class="frame-half">
-            <span class="half-label">С PlayMom</span>
-            <span class="tc-badge">12:00</span>
-            <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
-              <!-- high chair -->
-              <rect x="90" y="90" width="60" height="10" fill="#b2401e" opacity="0.5"/>
-              <rect x="100" y="100" width="6" height="40" fill="#b2401e" opacity="0.5"/>
-              <rect x="134" y="100" width="6" height="40" fill="#b2401e" opacity="0.5"/>
-              <rect x="95" y="60" width="50" height="32" fill="none" stroke="#1a1714" stroke-width="1.5"/>
-              <!-- Давид peacefully eating -->
-              <circle cx="120" cy="50" r="8" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="120" y1="58" x2="113" y2="76" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="120" y1="58" x2="130" y2="72" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- plate -->
-              <ellipse cx="120" cy="80" rx="14" ry="3" fill="#fff" stroke="#1a1714" stroke-width="1"/>
-              <!-- foil craft next to chair -->
-              <polygon points="170,130 180,110 200,115 195,135" fill="none" stroke="#1a1714" stroke-width="1.5"/>
-              <polygon points="175,115 185,105 192,120" fill="none" stroke="#1a1714" stroke-width="1"/>
-              <text x="165" y="148" font-size="9" fill="#6b6258">из фольги</text>
-            </svg>
+          <div class="frame-half locked">
+            <span class="half-label dark">Снизу · 🔒 Locked</span>
+            <span class="tc-badge dark">🔒</span>
+            <div class="locked-bg">
+              <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+                <rect x="90" y="90" width="60" height="10" fill="#8a7d6b"/>
+                <rect x="95" y="60" width="50" height="32" fill="none" stroke="#1a1714" stroke-width="1.5"/>
+                <circle cx="120" cy="68" r="8" fill="none" stroke="#1a1714" stroke-width="1.8"/>
+                <rect x="106" y="74" width="28" height="12" fill="none" stroke="#1a1714" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="lock-pill">
+              <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="11" width="16" height="10" rx="2"/>
+                <path d="M8 11V7a4 4 0 1 1 8 0v4"/>
+                <circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+              </svg>
+              <span class="lock-text">PlayMom</span>
+              <span class="lock-sub">Подождать ещё немного…</span>
+            </div>
           </div>
           <div class="wa-overlay">
             <div class="wa-avatar"></div>
@@ -787,12 +924,12 @@
       <h4>Что в кадре</h4>
       <div class="halves">
         <div>
-          <div class="half-title">Сверху</div>
-          Обед. Давид швыряет еду. Ира стоит с тряпкой, опустив плечи.
+          <div class="half-title">Сверху · ДО</div>
+          Стульчик для кормления. Давид швыряет еду. Стены оранжевые от пюре. Ира ловит ложку, телефон зажат плечом.
         </div>
-        <div class="calm">
-          <div class="half-title">Снизу</div>
-          Тот же обед. Давид ест. Рядом на полу — его поделка из фольги (из активности в приложении).
+        <div class="locked-desc">
+          <div class="half-title">Снизу · 🔒 Locked</div>
+          Сквозь дымку — тот же стульчик, но Давид сидит с миской и сосредоточенно смотрит на экран планшета.
         </div>
       </div>
 
@@ -803,29 +940,29 @@
           <span>Алёна ❤️ · 0:09</span>
         </div>
         <div class="vm-text">
-          «Нет, я пробовала всё. Мультики — не смотрит, ему рано. Игрушки надоедают за три минуты.» <span class="fx">тихий смешок</span> «Три минуты, Алён. Я засекала.»
+          «Три минуты, Алён. Я засекала. Игрушка три минуты — потом снова я. Мультики уже не катят, в телефон не даю. Я просто не знаю чем его занять, чтобы не разрушительно…»
         </div>
         <div class="vm-audio">
           <span class="play">▶</span>
           <div class="vm-wave-big">
-            <span style="height:40%"></span><span style="height:60%"></span><span style="height:30%"></span><span style="height:80%"></span><span style="height:45%"></span><span style="height:70%"></span><span style="height:35%"></span><span style="height:55%"></span><span style="height:25%"></span><span style="height:65%"></span>
+            <span style="height:50%"></span><span style="height:80%"></span><span style="height:35%"></span><span style="height:90%"></span><span style="height:45%"></span><span style="height:65%"></span><span style="height:30%"></span><span style="height:70%"></span><span style="height:55%"></span><span style="height:45%"></span><span style="height:75%"></span><span style="height:30%"></span>
           </div>
           <span>0:09</span>
         </div>
       </div>
 
-      <div class="note"><strong>Квотабл:</strong> «Три минуты, Алён. Я засекала.» — эту фразу мамы будут цитировать в подписях к репосту.</div>
+      <div class="note"><strong>Подпись на низу:</strong> «Подождать ещё немного…» — лёгкий тизинг для зрителя. Замок чуть пульсирует тёмным.</div>
     </div>
   </div>
 </section>
 
 <!-- ============================================ -->
-<!-- SCENE 3 — ТОЧКА БОЛИ -->
+<!-- SCENE 3 — POINT OF PAIN -->
 <!-- ============================================ -->
 <section class="scene">
   <div class="scene-head">
-    <span class="timecode">0:14 – 0:20</span>
-    <span class="clock">15:00</span>
+    <span class="timecode">0:13 – 0:20</span>
+    <span class="clock">19:00</span>
     <span class="scene-title">Ванная</span>
     <span class="scene-tag">Точка боли</span>
   </div>
@@ -835,53 +972,41 @@
       <div class="frame">
         <div class="frame-inner">
           <div class="frame-half top">
-            <span class="half-label">До</span>
-            <span class="tc-badge">15:00</span>
+            <span class="half-label">Сверху · ДО</span>
+            <span class="tc-badge">19:00</span>
             <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
-              <!-- floor -->
-              <line x1="0" y1="130" x2="240" y2="130" stroke="#8a7d6b" stroke-width="1.5"/>
-              <!-- pillow / Артем face down -->
-              <ellipse cx="50" cy="130" rx="40" ry="8" fill="#e6dcc6" stroke="#1a1714" stroke-width="1.5"/>
-              <circle cx="50" cy="125" r="8" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="35" y1="125" x2="65" y2="125" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- Ира sitting, knees up, head down -->
-              <circle cx="180" cy="90" r="9" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <path d="M180 99 L180 110 L175 130 L190 130 L195 110 Z" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="175" y1="100" x2="170" y2="95" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="185" y1="100" x2="190" y2="95" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- Давид screaming between them -->
-              <circle cx="120" cy="90" r="10" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <ellipse cx="120" cy="95" rx="4" ry="5" fill="#1a1714"/>
-              <line x1="120" y1="100" x2="120" y2="128" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="120" y1="108" x2="108" y2="118" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="120" y1="108" x2="132" y2="118" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- scream lines -->
-              <path d="M140 70 L152 62" stroke="#b2401e" stroke-width="1.5"/>
-              <path d="M100 70 L88 62" stroke="#b2401e" stroke-width="1.5"/>
-              <path d="M120 65 L120 54" stroke="#b2401e" stroke-width="1.5"/>
+              <rect x="60" y="40" width="120" height="100" fill="none" stroke="#1a1714" stroke-width="1.5"/>
+              <rect x="68" y="70" width="100" height="60" fill="#cfdfe7"/>
+              <path d="M68 75 Q90 85 110 75 T160 80" stroke="#1a1714" stroke-width="1" fill="none"/>
+              <circle cx="100" cy="85" r="6" fill="none" stroke="#1a1714" stroke-width="1.8"/>
+              <circle cx="140" cy="100" r="5" fill="none" stroke="#1a1714" stroke-width="1.8"/>
+              <text x="92" y="98" font-size="9" fill="#b2401e">✶</text>
+              <text x="135" y="115" font-size="8" fill="#b2401e">!</text>
+              <rect x="48" y="44" width="14" height="100" fill="none" stroke="#1a1714" stroke-width="1.2" stroke-dasharray="3 3"/>
+              <circle cx="55" cy="55" r="5" fill="none" stroke="#1a1714" stroke-width="1.8"/>
+              <text x="48" y="135" font-size="8" fill="#6b6258">взгляд</text>
             </svg>
           </div>
-          <div class="frame-half">
-            <span class="half-label">С PlayMom</span>
-            <span class="tc-badge">15:00</span>
-            <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
-              <!-- floor with tape road -->
-              <line x1="0" y1="130" x2="240" y2="130" stroke="#b2401e" opacity="0.4" stroke-width="1.5"/>
-              <!-- zigzag road of tape -->
-              <path d="M20 120 L60 100 L100 120 L140 100 L180 120 L220 100"
-                    stroke="#1a1714" stroke-width="6" fill="none" opacity="0.15"/>
-              <path d="M20 120 L60 100 L100 120 L140 100 L180 120 L220 100"
-                    stroke="#1a1714" stroke-width="1" stroke-dasharray="4 3" fill="none"/>
-              <!-- Давид crawling with car -->
-              <circle cx="110" cy="100" r="8" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="110" y1="108" x2="110" y2="125" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="110" y1="110" x2="130" y2="118" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- toy car -->
-              <rect x="130" y="115" width="14" height="8" fill="#b2401e" stroke="#1a1714" stroke-width="1"/>
-              <circle cx="133" cy="124" r="2" fill="#1a1714"/>
-              <circle cx="141" cy="124" r="2" fill="#1a1714"/>
-              <text x="55" y="148" font-size="9" fill="#6b6258" font-style="italic">дорога из скотча</text>
-            </svg>
+          <div class="frame-half locked warming">
+            <span class="half-label dark">Снизу · 🔒 Locked</span>
+            <span class="tc-badge dark">🔒</span>
+            <div class="locked-bg">
+              <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+                <rect x="40" y="100" width="160" height="50" fill="#e0d6c0"/>
+                <circle cx="120" cy="90" r="9" fill="none" stroke="#1a1714" stroke-width="1.8"/>
+                <rect x="100" y="105" width="40" height="22" fill="none" stroke="#1a1714" stroke-width="1.5" rx="2"/>
+                <line x1="120" y1="99" x2="120" y2="105" stroke="#1a1714" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="lock-pill">
+              <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="11" width="16" height="10" rx="2"/>
+                <path d="M8 11V7a4 4 0 1 1 8 0v4"/>
+                <circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+              </svg>
+              <span class="lock-text">PlayMom</span>
+              <span class="lock-sub">Уже почти…</span>
+            </div>
           </div>
           <div class="wa-overlay">
             <div class="wa-avatar"></div>
@@ -900,118 +1025,189 @@
       <h4>Что в кадре</h4>
       <div class="halves">
         <div>
-          <div class="half-title">Сверху</div>
-          Артём лицом в подушку. Ира на полу, обняв колени. Давид стоит между ними и орёт.
+          <div class="half-title">Сверху · ДО</div>
+          Ира пытается принять душ. Из-за двери — детский глаз в щель и протянутая рука. Никакой приватности.
         </div>
-        <div class="calm">
-          <div class="half-title">Снизу</div>
-          Давид возит машинку по дороге из малярного скотча на ламинате.
+        <div class="locked-desc">
+          <div class="half-title">Снизу · 🔒 Locked</div>
+          На полу в гостиной — Давид с планшетом, увлечён. Фигура читается через дымку. Замок чуть теплеет — оранжевый ободок.
         </div>
       </div>
 
-      <h4>Голосовое #3 · <span style="color:var(--accent); font-size: 13px; letter-spacing:0.1em; font-weight:700;">САМОЕ ТИХОЕ</span></h4>
+      <h4>Голосовое #3</h4>
       <div class="vm">
         <div class="vm-head">
           <span class="dot">●</span>
-          <span>Алёна ❤️ · 0:11</span>
+          <span>Алёна ❤️ · 0:08</span>
         </div>
         <div class="vm-text">
-          «Сегодня закрылась в ванной. Ненадолго.» <span class="fx">пауза 2 сек</span> «Сижу на полу, он плачет за дверью. И я… ну я просто дышала. Мне нужна была минута.»
+          «Я просто хочу… принять душ. Один. Без публики. Я в туалете дверь закрываю — он стучит. Это не норма уже…»
         </div>
         <div class="vm-audio">
           <span class="play">▶</span>
           <div class="vm-wave-big">
-            <span style="height:20%"></span><span style="height:25%"></span><span style="height:15%"></span><span style="height:30%"></span><span style="height:20%"></span><span style="height:10%"></span><span style="height:25%"></span><span style="height:18%"></span><span style="height:22%"></span><span style="height:12%"></span>
+            <span style="height:40%"></span><span style="height:70%"></span><span style="height:30%"></span><span style="height:80%"></span><span style="height:50%"></span><span style="height:35%"></span><span style="height:65%"></span><span style="height:45%"></span><span style="height:75%"></span><span style="height:30%"></span><span style="height:60%"></span><span style="height:40%"></span>
           </div>
-          <span>0:11</span>
+          <span>0:08</span>
         </div>
       </div>
 
-      <div class="note"><strong>Критично:</strong> этот фрагмент длится на 0.5 сек дольше, чем комфортно. Зритель должен успеть узнать в этом <em>себя</em>. Именно после этой сцены ролик перестаёт быть рекламой и становится историей.</div>
+      <div class="note"><strong>Эмоция к 0:20:</strong> зритель чувствует — она в тупике. Нижний экран как ответ, до которого ещё надо дойти. Мы не показываем что там — только намёк через blur.</div>
     </div>
   </div>
 </section>
 
 <!-- ============================================ -->
-<!-- SCENE 4 — ПРОЦЕСС -->
+<!-- SCENE 4 — PIVOT / UNLOCK -->
 <!-- ============================================ -->
-<section class="scene">
+<section class="scene" style="background: linear-gradient(180deg, transparent, #fff5e8 30%, #fff5e8 70%, transparent); padding: 32px 24px; border-radius: 8px;">
   <div class="scene-head">
-    <span class="timecode">0:20 – 0:25</span>
-    <span class="clock">Ночь → Утро</span>
-    <span class="scene-title">Серёж придумал</span>
-    <span class="scene-tag">Перелом</span>
+    <span class="timecode">0:20 – 0:28</span>
+    <span class="clock">19:30</span>
+    <span class="scene-title">Сделали сами</span>
+    <span class="scene-tag pivot">★ Pivot · Unlock</span>
   </div>
 
   <div class="scene-body">
     <div>
       <div class="frame">
         <div class="frame-inner">
-          <div class="frame-half top">
-            <span class="half-label">Ночь</span>
-            <span class="tc-badge">02:30</span>
+          <div class="frame-half top" style="opacity: 0.55;">
+            <span class="half-label">Сверху · затихает</span>
+            <span class="tc-badge">19:30</span>
             <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
-              <!-- dark background hint -->
-              <rect x="0" y="0" width="240" height="160" fill="#1a1714" opacity="0.08"/>
-              <!-- desk -->
-              <rect x="10" y="100" width="120" height="8" fill="#8a7d6b"/>
-              <rect x="15" y="108" width="6" height="40" fill="#8a7d6b"/>
-              <rect x="120" y="108" width="6" height="40" fill="#8a7d6b"/>
-              <!-- laptop -->
-              <path d="M40 100 L115 100 L110 80 L45 80 Z" fill="#fff" stroke="#1a1714" stroke-width="1.5"/>
-              <rect x="50" y="85" width="55" height="13" fill="#b2401e" opacity="0.3"/>
-              <!-- lamp circle of light -->
-              <circle cx="80" cy="90" r="55" fill="#fff9e0" opacity="0.35"/>
-              <!-- Артем with baby on shoulder -->
-              <circle cx="70" cy="70" r="9" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="70" y1="79" x2="70" y2="100" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="70" y1="82" x2="58" y2="92" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="70" y1="82" x2="82" y2="92" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- baby Давид on shoulder -->
-              <circle cx="82" cy="62" r="6" fill="none" stroke="#1a1714" stroke-width="1.5"/>
-              <path d="M82 68 Q88 70 90 65" stroke="#1a1714" stroke-width="1.5" fill="none"/>
-              <text x="88" y="56" font-size="10" fill="#6b6258">z</text>
-              <text x="93" y="50" font-size="8" fill="#6b6258">z</text>
-              <!-- Ира at side table with notebook -->
-              <rect x="155" y="100" width="75" height="8" fill="#8a7d6b"/>
-              <rect x="160" y="108" width="6" height="40" fill="#8a7d6b"/>
-              <rect x="220" y="108" width="6" height="40" fill="#8a7d6b"/>
-              <rect x="175" y="88" width="40" height="12" fill="#fff" stroke="#1a1714" stroke-width="1"/>
-              <line x1="180" y1="93" x2="210" y2="93" stroke="#1a1714" stroke-width="0.5"/>
-              <line x1="180" y1="96" x2="205" y2="96" stroke="#1a1714" stroke-width="0.5"/>
-              <circle cx="195" cy="70" r="8" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="195" y1="78" x2="195" y2="95" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="195" y1="82" x2="207" y2="92" stroke="#1a1714" stroke-width="1.8"/>
+              <rect x="40" y="100" width="160" height="50" fill="#e0d6c0"/>
+              <circle cx="100" cy="80" r="9" fill="none" stroke="#1a1714" stroke-width="1.8"/>
+              <line x1="100" y1="89" x2="100" y2="115" stroke="#1a1714" stroke-width="1.8"/>
+              <line x1="100" y1="92" x2="84" y2="100" stroke="#1a1714" stroke-width="1.8"/>
+              <line x1="100" y1="92" x2="116" y2="100" stroke="#1a1714" stroke-width="1.8"/>
+              <line x1="100" y1="115" x2="92" y2="135" stroke="#1a1714" stroke-width="1.8"/>
+              <line x1="100" y1="115" x2="108" y2="135" stroke="#1a1714" stroke-width="1.8"/>
+              <circle cx="160" cy="86" r="9" fill="none" stroke="#1a1714" stroke-width="1.8"/>
+              <rect x="148" y="100" width="24" height="36" fill="none" stroke="#1a1714" stroke-width="1.5" rx="3"/>
+              <text x="176" y="80" font-size="9" fill="#6b6258">смотрит на телефон</text>
+            </svg>
+          </div>
+          <div class="frame-half applepay">
+            <span class="unlocked-flash">Face ID</span>
+            <div class="ap-sheet">
+              <div class="ap-logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="white"><path d="M17.5 12.5c0-2.5 2-3.7 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9s-1.9-.9-3.2-.8c-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.1 1.2 9.5.8 1.1 1.7 2.4 2.9 2.4 1.2-.1 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2-1.2 2.8-2.3.9-1.3 1.2-2.6 1.2-2.6s-2.4-.9-2.4-3.6zM15 4.7c.6-.8 1-1.9.9-3-1 0-2.1.7-2.7 1.5-.5.7-1 1.8-.9 2.9 1 .1 2.1-.5 2.7-1.4z"/></svg>
+                <span>Apple Pay</span>
+              </div>
+              <div class="ap-row"><span>PlayMom</span><strong>$4.99</strong></div>
+              <div class="ap-row"><span>Подписка</span><span>1 мес.</span></div>
+              <div class="ap-divider"></div>
+              <div class="ap-row"><span>Итого</span><strong>$4.99</strong></div>
+              <div class="face-id">
+                <span class="check">✓</span>
+                <span class="label">Готово</span>
+              </div>
+            </div>
+          </div>
+          <div class="wa-overlay">
+            <div class="wa-avatar"></div>
+            <div>
+              <div class="wa-name">Алёна ❤️</div>
+              <div class="wa-wave">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scene-content">
+      <h4>Что происходит</h4>
+      <div class="halves">
+        <div>
+          <div class="half-title">Сверху · затихает</div>
+          Ира вышла, села с телефоном. Артём рядом. Хаос ушёл за кадр. Картинка чуть приглушается — внимание уходит вниз.
+        </div>
+        <div class="unlocked-desc">
+          <div class="half-title">Снизу · Apple Pay sheet</div>
+          Из чёрного выезжает знакомая платёжная панель. «PlayMom — $4.99 / мес.» Face ID моргает → ✓ «Готово» (зелёная плашка). 0,8 сек, как реальная покупка в App Store.
+        </div>
+      </div>
+
+      <h4>Голосовое #4 — триггер</h4>
+      <div class="vm pivot">
+        <div class="vm-head">
+          <span class="dot">●</span>
+          <span>Алёна ❤️ · 0:13</span>
+        </div>
+        <div class="vm-text">
+          «Слушай. Мы с Артёмом… короче. Сделали приложение. Сами. Для таких, как Давид. Я не шучу — реально работает. Скину сейчас, посмотришь.»
+        </div>
+        <div class="vm-audio">
+          <span class="play">▶</span>
+          <div class="vm-wave-big">
+            <span style="height:35%"></span><span style="height:65%"></span><span style="height:80%"></span><span style="height:50%"></span><span style="height:90%"></span><span style="height:40%"></span><span style="height:70%"></span><span style="height:55%"></span><span style="height:75%"></span><span style="height:45%"></span><span style="height:60%"></span><span style="height:35%"></span>
+          </div>
+          <span>0:13</span>
+        </div>
+      </div>
+
+      <div class="note unlock"><strong>Точная синхронизация:</strong> на словах «реально работает» — Apple Pay sheet выезжает (0,4 сек). На словах «скину сейчас» — Face ID моргает и появляется ✓. Звук покупки (тот самый «динь») — точно на «Готово».</div>
+
+      <h4>Звуковое решение</h4>
+      <p style="font-size: 14px;">До 0:22 — кухонные шумы, ор, телефонная статика. С момента появления Apple Pay sheet — всё затихает на 0,3 сек, потом тёплый акустический фон вступает (фортепьяно или гитара, тёплый ре-мажор).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SCENE 5 — REVEAL / CALM -->
+<!-- ============================================ -->
+<section class="scene">
+  <div class="scene-head">
+    <span class="timecode">0:28 – 0:33</span>
+    <span class="clock">19:31</span>
+    <span class="scene-title">Спокойно</span>
+    <span class="scene-tag pivot">Награда</span>
+  </div>
+
+  <div class="scene-body">
+    <div>
+      <div class="frame">
+        <div class="frame-inner">
+          <div class="frame-half top" style="opacity: 0.25;">
+            <span class="half-label">Сверху · уходит</span>
+            <span class="tc-badge">19:31</span>
+            <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+              <rect x="40" y="100" width="160" height="50" fill="#e0d6c0" opacity="0.7"/>
+              <circle cx="120" cy="86" r="9" fill="none" stroke="#1a1714" stroke-width="1.5" opacity="0.6"/>
+              <rect x="108" y="100" width="24" height="32" fill="none" stroke="#1a1714" stroke-width="1.2" rx="3" opacity="0.6"/>
             </svg>
           </div>
           <div class="frame-half">
-            <span class="half-label">Утро (с PlayMom)</span>
-            <span class="tc-badge">09:00</span>
+            <span class="half-label" style="background: rgba(52,199,89,0.18); color: #2a6f3f;">Снизу · с PlayMom</span>
+            <span class="tc-badge">19:31</span>
             <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
-              <!-- floor -->
-              <line x1="0" y1="130" x2="240" y2="130" stroke="#b2401e" opacity="0.4" stroke-width="1.5"/>
-              <!-- cardboard box maze -->
-              <rect x="40" y="90" width="110" height="40" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="70" y1="90" x2="70" y2="115" stroke="#1a1714" stroke-width="1.5"/>
-              <line x1="70" y1="115" x2="100" y2="115" stroke="#1a1714" stroke-width="1.5"/>
-              <line x1="100" y1="115" x2="100" y2="130" stroke="#1a1714" stroke-width="1.5"/>
-              <line x1="120" y1="90" x2="120" y2="105" stroke="#1a1714" stroke-width="1.5"/>
-              <circle cx="85" cy="103" r="3" fill="#b2401e"/>
-              <!-- Давид peeking into box -->
-              <circle cx="55" cy="80" r="8" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="55" y1="88" x2="55" y2="105" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- Ира filming with phone, smile -->
-              <circle cx="190" cy="80" r="10" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <path d="M186 82 Q190 85 194 82" stroke="#1a1714" stroke-width="1.2" fill="none"/>
-              <line x1="190" y1="90" x2="190" y2="130" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="190" y1="94" x2="175" y2="102" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="190" y1="94" x2="205" y2="102" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- phone -->
-              <rect x="165" y="96" width="10" height="16" fill="#1a1714" rx="1"/>
-              <text x="130" y="148" font-size="9" fill="#6b6258" font-style="italic">картонный лабиринт</text>
+              <rect x="20" y="120" width="200" height="20" fill="#e6dcc6"/>
+              <rect x="80" y="60" width="80" height="60" fill="none" stroke="#1a1714" stroke-width="1.8" rx="4"/>
+              <rect x="86" y="66" width="68" height="48" fill="#cfdfe7"/>
+              <circle cx="100" cy="80" r="3" fill="#b2401e"/>
+              <circle cx="120" cy="86" r="3" fill="#34c759"/>
+              <circle cx="140" cy="80" r="3" fill="#b2401e"/>
+              <path d="M100 95 Q120 105 140 95" stroke="#1a1714" stroke-width="1.5" fill="none"/>
+              <circle cx="120" cy="50" r="9" fill="none" stroke="#1a1714" stroke-width="1.8"/>
+              <line x1="120" y1="59" x2="120" y2="78" stroke="#1a1714" stroke-width="1.8"/>
+              <line x1="120" y1="62" x2="105" y2="74" stroke="#1a1714" stroke-width="1.8"/>
+              <line x1="120" y1="62" x2="135" y2="74" stroke="#1a1714" stroke-width="1.8"/>
+              <circle cx="200" cy="46" r="9" fill="none" stroke="#1a1714" stroke-width="1.8"/>
+              <line x1="200" y1="55" x2="200" y2="100" stroke="#1a1714" stroke-width="1.8"/>
+              <line x1="200" y1="60" x2="188" y2="70" stroke="#1a1714" stroke-width="1.8"/>
+              <rect x="178" y="62" width="10" height="8" fill="#fff" stroke="#1a1714" stroke-width="1"/>
+              <path d="M181 60 Q183 56 182 53" stroke="#1a1714" stroke-width="0.8" fill="none"/>
+              <path d="M186 60 Q188 56 187 53" stroke="#1a1714" stroke-width="0.8" fill="none"/>
+              <text x="40" y="40" font-size="8" fill="#34c759">♪</text>
+              <text x="58" y="48" font-size="6" fill="#34c759">♪</text>
+              <text x="190" y="120" font-size="8" fill="#34c759">♪</text>
             </svg>
           </div>
-          <div class="wa-overlay">
+          <div class="wa-overlay" style="opacity: 0.6;">
             <div class="wa-avatar"></div>
             <div>
               <div class="wa-name">Алёна ❤️</div>
@@ -1027,261 +1223,106 @@
     <div class="scene-content">
       <h4>Что в кадре</h4>
       <div class="halves">
-        <div>
-          <div class="half-title">Сверху · Ночь</div>
-          Артём за ноутом, Давид спит на плече. Ира за соседним столом пишет список игр от руки в блокнот.
+        <div class="locked-desc" style="background: #f3ecdd; color: var(--ink-muted); border-left-color: var(--ink-muted);">
+          <div class="half-title" style="color: var(--ink-muted);">Сверху · уходит</div>
+          Полупрозрачно — отголосок верха. Ира с чашкой кофе, без телефона. Кадр перетекает.
         </div>
-        <div class="calm">
-          <div class="half-title">Снизу · Утро</div>
-          Тот же Давид играет с картонным лабиринтом. Ира снимает на телефон и улыбается.
+        <div class="unlocked-desc">
+          <div class="half-title">Снизу · разблокирован</div>
+          Давид с планшетом — играет в PlayMom. Сосредоточен. Ира рядом, пьёт <em>горячий</em> кофе. Артём с другой кружкой. Кадр в тёплом свете.
         </div>
       </div>
 
-      <h4>Голосовое #4</h4>
+      <h4>Голосовое #5 — финал</h4>
       <div class="vm">
         <div class="vm-head">
           <span class="dot">●</span>
-          <span>Алёна ❤️ · 0:12</span>
+          <span>Алёна ❤️ · 0:05</span>
         </div>
         <div class="vm-text">
-          «Слушай, Артём вчера ночью говорит — давай сами сделаем. Ну, приложение. С играми для малышей из того, что уже дома есть.» <span class="fx">смешок</span> «Я сначала ржала. А потом подумала — ну а что. Всё равно уже на краю.»
+          «Я допила кофе. Горячим. До конца.»
         </div>
         <div class="vm-audio">
           <span class="play">▶</span>
           <div class="vm-wave-big">
-            <span style="height:50%"></span><span style="height:65%"></span><span style="height:40%"></span><span style="height:75%"></span><span style="height:55%"></span><span style="height:80%"></span><span style="height:45%"></span><span style="height:60%"></span><span style="height:35%"></span><span style="height:70%"></span>
+            <span style="height:25%"></span><span style="height:35%"></span><span style="height:45%"></span><span style="height:30%"></span><span style="height:25%"></span><span style="height:20%"></span><span style="height:15%"></span><span style="height:25%"></span><span style="height:30%"></span><span style="height:20%"></span><span style="height:15%"></span><span style="height:10%"></span>
           </div>
-          <span>0:12</span>
+          <span>0:05</span>
         </div>
       </div>
 
-      <div class="note"><strong>Визуальный якорь:</strong> это момент, где «до» и «с приложением» впервые тематически сходятся — <em>ваш труд → ваш результат</em>. Это готовит зрителя к слому экрана.</div>
+      <div class="note"><strong>Линия исчезает:</strong> к концу сцены 5 разделительная линия между половинами тает, верх полностью затемняется, остаётся только нижний кадр с Давидом и музыка.</div>
     </div>
   </div>
 </section>
 
 <!-- ============================================ -->
-<!-- SCENE 5 — СЛОМ -->
+<!-- SCENE 6 — END CARD -->
 <!-- ============================================ -->
 <section class="scene">
   <div class="scene-head">
-    <span class="timecode">0:25 – 0:32</span>
-    <span class="clock">одно утро</span>
-    <span class="scene-title">Линия исчезает</span>
-    <span class="scene-tag" style="color:#b2401e;">Катарсис</span>
-  </div>
-
-  <div class="scene-body">
-    <div>
-      <div class="frame">
-        <div class="frame-inner">
-          <div class="frame-half" style="height: 100%; grid-column: 1/-1;">
-            <span class="half-label" style="background: var(--accent); color: white;">Больше нет «До» и «После»</span>
-            <span class="tc-badge">сейчас</span>
-            <svg viewBox="0 0 240 260" xmlns="http://www.w3.org/2000/svg" style="max-height: 260px;">
-              <!-- warm morning light hint -->
-              <rect x="0" y="0" width="240" height="260" fill="#fff9e0" opacity="0.3"/>
-              <!-- floor -->
-              <line x1="0" y1="220" x2="240" y2="220" stroke="#8a7d6b" stroke-width="1.5"/>
-              <!-- rug -->
-              <rect x="20" y="180" width="200" height="50" fill="#b2401e" opacity="0.15" rx="2"/>
-              <!-- Артем on left -->
-              <circle cx="50" cy="130" r="11" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <path d="M46 133 Q50 136 54 133" stroke="#1a1714" stroke-width="1.2" fill="none"/>
-              <!-- sitting pose -->
-              <path d="M50 141 L50 160 L40 200 L70 200 Z" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="50" y1="150" x2="70" y2="160" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="50" y1="150" x2="35" y2="165" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- Давид in middle with bowls -->
-              <circle cx="120" cy="150" r="10" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <path d="M115 152 Q120 155 125 152" stroke="#1a1714" stroke-width="1.2" fill="none"/>
-              <line x1="120" y1="160" x2="108" y2="195" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="120" y1="160" x2="132" y2="195" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="120" y1="165" x2="100" y2="180" stroke="#1a1714" stroke-width="1.8"/>
-              <line x1="120" y1="165" x2="140" y2="180" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- bowls -->
-              <path d="M90 195 Q90 188 100 188 L108 188 Q118 188 118 195 Z" fill="none" stroke="#1a1714" stroke-width="1.5"/>
-              <path d="M130 195 Q130 188 140 188 L148 188 Q158 188 158 195 Z" fill="none" stroke="#1a1714" stroke-width="1.5"/>
-              <circle cx="105" cy="191" r="0.8" fill="#1a1714"/>
-              <circle cx="110" cy="190" r="0.8" fill="#1a1714"/>
-              <circle cx="144" cy="191" r="0.8" fill="#1a1714"/>
-              <!-- Ира on right with HOT COFFEE -->
-              <circle cx="195" cy="125" r="11" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- slight smile -->
-              <path d="M189 128 Q195 132 201 128" stroke="#1a1714" stroke-width="1.2" fill="none"/>
-              <!-- sitting pose -->
-              <path d="M195 136 L195 160 L185 200 L215 200 Z" fill="none" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- arm with cup -->
-              <line x1="195" y1="145" x2="180" y2="130" stroke="#1a1714" stroke-width="1.8"/>
-              <!-- coffee cup! -->
-              <rect x="170" y="118" width="14" height="14" fill="#fff" stroke="#1a1714" stroke-width="1.8"/>
-              <path d="M184 121 Q190 121 190 128 Q190 130 186 130" stroke="#1a1714" stroke-width="1.5" fill="none"/>
-              <!-- steam -->
-              <path d="M173 115 Q175 108 173 100" stroke="#b2401e" stroke-width="1.2" fill="none"/>
-              <path d="M178 115 Q180 108 178 100" stroke="#b2401e" stroke-width="1.2" fill="none"/>
-              <path d="M181 115 Q183 110 181 105" stroke="#b2401e" stroke-width="1.2" fill="none"/>
-              <!-- coffee arrow label -->
-              <line x1="160" y1="113" x2="140" y2="100" stroke="#b2401e" stroke-width="1"/>
-              <text x="80" y="95" font-size="11" fill="#b2401e" font-weight="700">горячий. до конца.</text>
-            </svg>
-          </div>
-          <div class="wa-overlay">
-            <div class="wa-avatar"></div>
-            <div>
-              <div class="wa-name">Алёна ❤️</div>
-              <div class="wa-wave">
-                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="note" style="margin-top:12px;"><strong>Переход:</strong> на 25-й секунде разделительная линия дрожит, пиксельно растворяется. Два экрана становятся одним. Впервые за весь ролик — целая картина, одна семья, одно утро.</div>
-    </div>
-
-    <div class="scene-content">
-      <h4>Что в кадре</h4>
-      <p>Артём, Ира и Давид на полу гостиной. Давид посередине — пересыпает крупу из миски в миску. Ира держит кружку с кофе. <strong>Полный глоток. До конца.</strong> Никто её не дёргает.</p>
-
-      <h4>Голосовое #5 · <span style="color:var(--accent); font-size: 13px; letter-spacing:0.1em; font-weight:700;">КЛЮЧЕВОЕ</span></h4>
-      <div class="vm">
-        <div class="vm-head">
-          <span class="dot">●</span>
-          <span>Алёна ❤️ · 0:18</span>
-        </div>
-        <div class="vm-text">
-          «Алён.» <span class="fx">пауза, хмыкает</span> «Я допила кофе. Горячим. До конца. Целую чашку.» <span class="fx">пауза</span> «Он сидит на полу, крупу пересыпает. А я… блин, я не знаю, я прям реву сейчас. От того что просто… допила.» <span class="fx">смех со слезами</span> «Да-да, со мной всё норм. Прости.»
-        </div>
-        <div class="vm-audio">
-          <span class="play">▶</span>
-          <div class="vm-wave-big">
-            <span style="height:35%"></span><span style="height:70%"></span><span style="height:20%"></span><span style="height:80%"></span><span style="height:45%"></span><span style="height:90%"></span><span style="height:30%"></span><span style="height:65%"></span><span style="height:50%"></span><span style="height:75%"></span><span style="height:40%"></span><span style="height:85%"></span>
-          </div>
-          <span>0:18</span>
-        </div>
-      </div>
-
-      <h4>Титр на экране</h4>
-      <div style="background: var(--paper-dark); padding: 20px 24px; border-radius: 4px; text-align: center; font-family: 'Iowan Old Style', Georgia, serif; font-size: 22px; line-height: 1.3;">
-        Больше нет «до» и «после».<br>
-        <strong>Есть мы.</strong>
-      </div>
-
-      <div class="note" style="margin-top:14px;"><strong>Аудио:</strong> первое появление музыки за весь ролик. Тёплая, домашняя. Не триумфальная — сдержанная.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================ -->
-<!-- SCENE 6 — CTA -->
-<!-- ============================================ -->
-<section class="scene">
-  <div class="scene-head">
-    <span class="timecode">0:32 – 0:35</span>
+    <span class="timecode">0:33 – 0:35</span>
     <span class="clock">—</span>
-    <span class="scene-title">Давид машет</span>
-    <span class="scene-tag">CTA</span>
+    <span class="scene-title">Сделано семьёй</span>
+    <span class="scene-tag pivot">End card</span>
   </div>
 
   <div class="scene-body">
     <div>
       <div class="frame">
         <div class="frame-inner">
-          <div class="frame-half" style="height: 100%; grid-column: 1/-1; background: #f3ecdd;">
-            <svg viewBox="0 0 240 260" xmlns="http://www.w3.org/2000/svg" style="max-height: 260px;">
-              <!-- close up on Davit's face + waving hand -->
-              <circle cx="120" cy="130" r="50" fill="#f2d4c4" stroke="#1a1714" stroke-width="2"/>
-              <!-- hair tuft -->
-              <path d="M92 90 Q100 78 115 82" stroke="#1a1714" stroke-width="2" fill="none"/>
-              <path d="M115 82 Q130 78 148 92" stroke="#1a1714" stroke-width="2" fill="none"/>
-              <!-- eyes -->
-              <circle cx="103" cy="125" r="3" fill="#1a1714"/>
-              <circle cx="137" cy="125" r="3" fill="#1a1714"/>
-              <!-- smile -->
-              <path d="M103 148 Q120 162 137 148" stroke="#1a1714" stroke-width="2" fill="none"/>
-              <!-- cheeks -->
-              <circle cx="90" cy="140" r="5" fill="#b2401e" opacity="0.3"/>
-              <circle cx="150" cy="140" r="5" fill="#b2401e" opacity="0.3"/>
-              <!-- waving hand -->
-              <circle cx="200" cy="90" r="18" fill="#f2d4c4" stroke="#1a1714" stroke-width="2"/>
-              <line x1="195" y1="95" x2="195" y2="80" stroke="#1a1714" stroke-width="1.5"/>
-              <line x1="201" y1="95" x2="201" y2="78" stroke="#1a1714" stroke-width="1.5"/>
-              <line x1="207" y1="95" x2="207" y2="80" stroke="#1a1714" stroke-width="1.5"/>
-              <line x1="213" y1="95" x2="213" y2="82" stroke="#1a1714" stroke-width="1.5"/>
-              <!-- motion lines for wave -->
-              <path d="M220 75 L232 68" stroke="#1a1714" stroke-width="1.2"/>
-              <path d="M222 85 L235 85" stroke="#1a1714" stroke-width="1.2"/>
-              <path d="M220 95 L232 102" stroke="#1a1714" stroke-width="1.2"/>
-            </svg>
+          <div class="frame-half endcard" style="min-height: 360px;">
+            <div class="pm-logo">PlayMom</div>
+            <div class="pm-tag">Игры, в которые он играет сам</div>
+            <div class="pm-family">Сделано семьёй —<br>Артём, Ира, Давид</div>
+            <div class="pm-store">Скачать в App Store</div>
+            <div style="font-size: 7px; color: var(--ink-muted); margin-top: 6px; letter-spacing: 0.1em;">playmom.app</div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="scene-content">
-      <h4>Голосовое #6 · финал</h4>
-      <div class="vm">
-        <div class="vm-head">
-          <span class="dot">●</span>
-          <span>Алёна ❤️ · 0:06</span>
-        </div>
-        <div class="vm-text">
-          «В общем… если у тебя так же — скажи. Я скину. Мы сами сделали.»
-        </div>
-        <div class="vm-audio">
-          <span class="play">▶</span>
-          <div class="vm-wave-big">
-            <span style="height:40%"></span><span style="height:60%"></span><span style="height:35%"></span><span style="height:50%"></span><span style="height:45%"></span><span style="height:55%"></span>
-          </div>
-          <span>0:06</span>
-        </div>
-      </div>
+      <h4>Что на карте</h4>
+      <ul style="list-style: none; padding: 0; font-size: 14px;">
+        <li style="margin: 6px 0;">▸ Логотип <strong>PlayMom</strong> — в фирменном тёплом коричневом / акценте</li>
+        <li style="margin: 6px 0;">▸ Слоган: <em>«Игры, в которые он играет сам»</em></li>
+        <li style="margin: 6px 0;">▸ Подпись: <em>«Сделано семьёй — Артём, Ира, Давид»</em> — этот якорь делает рекламу личной</li>
+        <li style="margin: 6px 0;">▸ CTA-плашка: <strong>Скачать в App Store</strong></li>
+        <li style="margin: 6px 0;">▸ Домен: <em>playmom.app</em> мелко, ненавязчиво</li>
+      </ul>
 
-      <h4>Конечный титр</h4>
-      <div style="background: #1a1714; color: var(--paper); padding: 32px 24px; border-radius: 4px; text-align: center; font-family: 'Iowan Old Style', Georgia, serif;">
-        <div style="font-size: 36px; font-weight: 600; letter-spacing: -0.02em;">PlayMom</div>
-        <div style="font-size: 14px; margin-top: 8px; opacity: 0.7; font-family: sans-serif;">Сделано семьёй — Артём, Ира, Давид</div>
-        <div style="font-size: 13px; margin-top: 16px; padding: 8px 14px; border: 1px solid var(--paper); display: inline-block; border-radius: 4px; font-family: sans-serif;">Скачать в App Store</div>
-      </div>
+      <h4>Звук</h4>
+      <p style="font-size: 14px;">Тёплая нота держится 1,5 сек, затем мягко уходит. На последнем кадре — короткий «динь» как у iOS notification (опционально, если не перебивает).</p>
 
-      <div class="note" style="margin-top: 14px;"><strong>Встроенный CTA:</strong> фраза «если у тебя так же — скажи, я скину» — это инструкция зрителю <em>переслать другу</em>, замаскированная под реплику подруге. Виральная механика без рекламного тона.</div>
+      <div class="note"><strong>Длительность:</strong> ровно 2 секунды. Не дольше — иначе теряется напор финала. Крупные TikTok / Reels-зрители за 2 сек считывают «откуда это» и идут в стор.</div>
     </div>
   </div>
 </section>
 
 <!-- ============================================ -->
-<!-- EMOTIONAL ARC -->
+<!-- ARC -->
 <!-- ============================================ -->
 <h2>Эмоциональная карта</h2>
+
 <div class="arc">
-  <p style="margin-bottom: 12px; font-size: 14px; color: var(--ink-muted);">Зритель проходит через пять состояний за 35 секунд. Главный удар — на 15-й секунде, катарсис — на 27-й.</p>
+  <p style="margin: 0; font-size: 14px;">Напряжение нарастает три акта (1–3), переламывается на «сделали сами» + Apple Pay (4), и спадает в тепле (5–6). Лок снизу держит зрителя на крючке — он знает, что разрядка будет, и ждёт её.</p>
+
   <div class="arc-graph">
-    <div class="arc-bar mid">
-      <div class="fill"></div>
-      <div class="moment">узнавание</div>
-      <div class="label">0:00</div>
-    </div>
-    <div class="arc-bar high">
-      <div class="fill"></div>
-      <div class="moment">усталость</div>
-      <div class="label">0:08</div>
-    </div>
-    <div class="arc-bar peak" style="background: var(--accent);">
-      <div class="fill" style="background: var(--accent);"></div>
-      <div class="moment">точка боли</div>
-      <div class="label">0:15</div>
-    </div>
-    <div class="arc-bar mid">
-      <div class="fill"></div>
-      <div class="moment">надежда</div>
-      <div class="label">0:22</div>
-    </div>
-    <div class="arc-bar low">
-      <div class="fill"></div>
-      <div class="moment">катарсис</div>
-      <div class="label">0:30</div>
-    </div>
+    <div class="arc-bar" style="height: 30%;">Хук</div>
+    <div class="arc-bar" style="height: 55%;">+25%</div>
+    <div class="arc-bar peak" style="height: 90%;">Пик</div>
+    <div class="arc-bar" style="height: 65%;">Перелом</div>
+    <div class="arc-bar calm" style="height: 35%;">Спад</div>
+    <div class="arc-bar calm" style="height: 22%;">CTA</div>
+  </div>
+  <div class="arc-labels">
+    <div>1 · 0–7"</div>
+    <div>2 · 7–13"</div>
+    <div>3 · 13–20"</div>
+    <div>4 · 20–28"</div>
+    <div>5 · 28–33"</div>
+    <div>6 · 33–35"</div>
   </div>
 </div>
 
@@ -1289,84 +1330,126 @@
 <!-- QUOTABLES -->
 <!-- ============================================ -->
 <h2>Квотаблы для репоста</h2>
-<p style="color: var(--ink-muted);">Фразы из голосовых Иры, которые мамы будут цитировать в подписях при пересылке подругам.</p>
 
-<div class="quotables">
-  <div class="quote">
-    <div class="quote-text">«Три минуты, Алён. Я засекала.»</div>
-    <div class="quote-why">О том, сколько живёт любая игрушка. Идеально для сторис-подписи.</div>
-  </div>
-  <div class="quote">
-    <div class="quote-text">«Сижу на полу, он плачет за дверью. И я просто дышала.»</div>
-    <div class="quote-why">Самая болезненная — именно её будут пересылать со слезами.</div>
-  </div>
-  <div class="quote">
-    <div class="quote-text">«Я допила кофе. Горячим. До конца.»</div>
-    <div class="quote-why">Символ «мне удалось». Мемный потенциал.</div>
-  </div>
-  <div class="quote">
-    <div class="quote-text">«Всё равно уже на краю.»</div>
-    <div class="quote-why">Про решение сделать приложение. Для аудитории 30+.</div>
-  </div>
-  <div class="quote">
-    <div class="quote-text">«Если у тебя так же — скажи. Я скину.»</div>
-    <div class="quote-why">Встроенный вирусный CTA. Разрешение переслать.</div>
-  </div>
+<div class="quote">
+  «Три минуты, Алён. Я засекала.»
+  <span class="quote-attr">Сцена 2 · стандартная боль для Reels-карусели</span>
+</div>
+
+<div class="quote">
+  «Я в туалете дверь закрываю — он стучит.»
+  <span class="quote-attr">Сцена 3 · самое узнаваемое</span>
+</div>
+
+<div class="quote">
+  «Слушай. Мы с Артёмом сделали приложение. Сами. Реально работает.»
+  <span class="quote-attr">Сцена 4 · триггер для unlock — главная фраза ролика</span>
+</div>
+
+<div class="quote">
+  «Я допила кофе. Горячим. До конца.»
+  <span class="quote-attr">Сцена 5 · награда. Можно вынести в обложку креатива.</span>
 </div>
 
 <!-- ============================================ -->
-<!-- PRODUCTION -->
+<!-- WHAT TO RECORD -->
 <!-- ============================================ -->
 <h2>Что записать / что снять</h2>
 
-<div class="prod-grid">
-  <div class="prod-col">
-    <h4>Ире · один вечер, 30 минут</h4>
-    <p style="font-size:13px; color: var(--ink-muted);">Не заучивать сценарий. Открыть WhatsApp, нажать на микрофон, <strong>говорить</strong> — как если бы правда Алёне. По 3 дубля на каждую тему:</p>
-    <ul>
-      <li>«Давид не сидит ни секунды, я схожу с ума»</li>
-      <li>«Любая игрушка — три минуты, я засекала»</li>
-      <li>«Сегодня закрылась в ванной подышать»</li>
-      <li>«Артём придумал сделать приложение сами»</li>
-      <li>«Я допила кофе горячим, реву от счастья»</li>
-      <li>«Если у тебя так же — скажи, скину»</li>
-    </ul>
-  </div>
+<h3 style="font-size: 18px;">Аудио (Ира → Алёна, в WhatsApp, реальные)</h3>
+<ul class="prod">
+  <li>
+    <strong>VM 1 — «Алён, секунду…»</strong>
+    Записать утром во время реального хаоса. Не вычищать грохот и крик Давида. ~11 сек.
+  </li>
+  <li>
+    <strong>VM 2 — «Три минуты»</strong>
+    После обеда, кухня, на фоне столика. Голос усталый. ~9 сек.
+  </li>
+  <li>
+    <strong>VM 3 — «Душ / без публики»</strong>
+    Вечером, тише, ближе к шёпоту. ~8 сек.
+  </li>
+  <li>
+    <strong>VM 4 — «Сделали сами / реально работает» 🌟</strong>
+    Это <em>единственная</em> голосовая, которую можно переписать несколько раз — она триггер. Тон должен быть «между делом», а не «реклама». ~13 сек.
+  </li>
+  <li>
+    <strong>VM 5 — «Допила кофе»</strong>
+    Тихо, удовлетворённо. ~5 сек.
+  </li>
+</ul>
 
-  <div class="prod-col">
-    <h4>Съёмка · один день</h4>
-    <ul>
-      <li>5 парных сцен «до/после»: 07:00, 09:30, 12:00, 15:00, 18:00</li>
-      <li>Ночной план: Артём с ноутбуком, Давид спит на плече</li>
-      <li>Ира с блокнотом за соседним столом</li>
-      <li>Финальная сцена: втроём на полу, горячий кофе</li>
-      <li>Давид, машущий в камеру (поймать натурально)</li>
-      <li>Screen recording PlayMom · 2 минуты</li>
-    </ul>
-  </div>
+<h3 style="font-size: 18px;">Видео — Верх (хаос)</h3>
+<ul class="prod">
+  <li>
+    <strong>Кухня · молоко</strong>
+    Давид на столе, молоко льётся, Артём ловит. Снимать в одном дубле, не репетировать.
+  </li>
+  <li>
+    <strong>Стульчик · еда летит</strong>
+    Кашу/пюре по стенам. Ира с тряпкой и телефоном. Минимум монтажа — длинный кадр.
+  </li>
+  <li>
+    <strong>Ванная · щель в двери</strong>
+    Снимать через щель — глаз Давида + рука. Снаружи Ира за матовым стеклом. Кадр символический, не показывать наготу.
+  </li>
+  <li>
+    <strong>Коридор · затихание</strong>
+    Ира садится, телефон в руках. Артём подходит. Снять одним движением камеры из коридора в гостиную.
+  </li>
+</ul>
 
-  <div class="prod-col">
-    <h4>Монтаж · один вечер</h4>
-    <ul>
-      <li>Разметить split-screen в Premiere/CapCut 9:16</li>
-      <li>Синхронизировать тайм-коды на парных сценах</li>
-      <li>Наложить WhatsApp-оверлей с осциллограммой</li>
-      <li>Слом линии на 0:25 — пиксельный распад</li>
-      <li>Музыку ввести только с 0:27</li>
-      <li>Финальный титр 3 секунды</li>
-    </ul>
-  </div>
-</div>
+<h3 style="font-size: 18px;">Видео — Низ (PlayMom)</h3>
+<ul class="prod">
+  <li>
+    <strong>Apple Pay sheet</strong>
+    Записать экранкой Mac или iPhone — реальный flow покупки PlayMom (через App Store sandbox / TestFlight). Этот кусок 5–6 сек, должен быть на 100% узнаваем как «обычная покупка в App Store».
+  </li>
+  <li>
+    <strong>Давид с планшетом</strong>
+    Тот же ребёнок, тот же кадр, но <em>играет</em>. Сидит, держит планшет, сосредоточен. Свет тёплый, окно сбоку.
+  </li>
+  <li>
+    <strong>Семья на полу</strong>
+    Закадровая — Ира с кофе, Артём с кружкой, Давид с планшетом. Естественные позы.
+  </li>
+  <li>
+    <strong>Скриншот PlayMom UI (на планшете в кадре)</strong>
+    Реальный экран приложения, не мокап. Нужен крупный план в кадре сцены 5.
+  </li>
+</ul>
+
+<h3 style="font-size: 18px;">Графика / постпро</h3>
+<ul class="prod">
+  <li>
+    <strong>Lock-overlay (низ, сцены 1–3)</strong>
+    Тёмный слой 65% над живым кадром, blur 2px, центральная плашка с иконкой замка и подписью. Слегка пульсирует.
+  </li>
+  <li>
+    <strong>Apple Pay sheet (сцена 4)</strong>
+    Точная копия iOS платёжной панели. Анимация выезда снизу + Face ID моргает + ✓.
+  </li>
+  <li>
+    <strong>Разделительная линия</strong>
+    Чёткая до сцены 4, на сцене 5 размывается и в сцене 6 исчезает.
+  </li>
+  <li>
+    <strong>WhatsApp-плашка с волной голоса</strong>
+    Постоянно в правом-верху, стандартный WA-стиль. Прыгает по уровню звука.
+  </li>
+  <li>
+    <strong>End card</strong>
+    Тёплая бумага, логотип, имена. Лаконичный кадр, не перегружать.
+  </li>
+</ul>
 
 <!-- ============================================ -->
 <!-- FINAL -->
 <!-- ============================================ -->
 <section class="end">
-  <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--ink-muted); margin-bottom: 8px;">Финал</div>
-  <h2 style="font-family: 'Iowan Old Style', Georgia, serif;">Голос Иры — не актёрский.<br>В этом и суть.</h2>
-  <p style="margin-top: 16px; max-width: 540px; margin-left: auto; margin-right: auto;">
-    Ровный, профессионально записанный голос убьёт ролик. Все хрипы, паузы, смех сквозь слёзы, ор Давида на фоне — <strong>остаются</strong>. Это не баг, это и есть продукт. Это и есть то, ради чего зритель нажмёт «переслать».
-  </p>
+  <h2 style="font-family: 'Iowan Old Style', Georgia, serif; border: 0; margin: 0;">Замок — это ожидание.<br>Apple Pay — это знакомство.<br>Семья — это правда.</h2>
+  <p style="font-size: 13px; color: var(--ink-muted); margin-top: 12px;">v2 · Locked-bottom + Apple Pay reveal. Версия 1 (split-screen + line break) сохранена в репозитории как index-v1-splitscreen.html.</p>
 </section>
 
 </body>
